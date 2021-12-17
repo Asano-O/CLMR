@@ -37,6 +37,8 @@ class AUDIO(Dataset):
                     self._path
                 )
             )
+        self.nsynth_labelmap = {"bass":0, "brass":1, "flute":2, "guitar":3, "keyboard":4, "mallet":5, 
+                   "organ":6, "reed":7, "string":8, "synth_lead":9, "vocal":10}
 
     def file_path(self, n: int) -> str:
         fp = self.fl[n]
@@ -52,7 +54,8 @@ class AUDIO(Dataset):
             Tuple [Tensor, Tensor]: ``(waveform, label)``
         """
         audio, _ = self.load(n)
-        label = []
+        class_name = self.file_path(n).split('/')[-1].split('_')[0]
+        label = [self.nsynth_labelmap[class_name]]
         return audio, label
 
     def __len__(self) -> int:
